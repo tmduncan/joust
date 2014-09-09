@@ -8,11 +8,26 @@ public class BasicCodalot implements Codalot{
 
     public BasicCodalot() {
         knights = new ArrayList<Knight>();
+        for (int i = 0; i < 6; ++i) {
+            knights.add(new Knight());
+        }
     }
 
     @Override
     public void setKnight(int id, KnightPosition position) {
-
+        Knight knight = knights.get(id);
+        knight.setInTavern(false);
+        knight.setInTrainingYard(false);
+        switch (position) {
+            case TAVERN: {
+                knight.setInTavern(true);
+                break;
+            }
+            case TRAINING_YARD: {
+                knight.setInTrainingYard(true);
+                break;
+            }
+        }
     }
 
     @Override
@@ -25,7 +40,11 @@ public class BasicCodalot implements Codalot{
 
     @Override
     public int calculateEarnedXp() {
-        return 0;
+        int total = 0;
+        for (Knight knight : knights) {
+            total += knight.getXp();
+        }
+        return total;
     }
 
     public void clearKnights() {
