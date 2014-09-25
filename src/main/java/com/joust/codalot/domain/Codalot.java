@@ -1,12 +1,17 @@
 package com.joust.codalot.domain;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Codalot {
-    private ArrayList<Knight> knights;
+    private List<Knight> knights;
 
     public Codalot() {
         knights = new ArrayList<>();
+    }
+
+    protected void setKnights(List<Knight> knights) {
+        this.knights = knights;
     }
 
     public void clearKnights() {
@@ -58,5 +63,13 @@ public class Codalot {
                 }
             }
         }
+    }
+
+    public int calculateEarnedXp() {
+        int total = 0;
+        for (Knight knight : knights) {
+            total += knight.getXp();
+        }
+        return total;
     }
 }

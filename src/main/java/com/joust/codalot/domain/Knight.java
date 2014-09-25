@@ -42,17 +42,17 @@ public class Knight extends Citizen {
             return this;
         }
 
-        KnightBuilder withStamina(int stamina) {
+        public KnightBuilder withStamina(int stamina) {
             this.knight.setStamina(stamina);
             return this;
         }
 
-        KnightBuilder withPosition(Position position) {
+        public KnightBuilder withPosition(Position position) {
             this.knight.setPosition(position);
             return this;
         }
 
-        Knight build() {
+        public Knight build() {
             return this.knight;
         }
 
