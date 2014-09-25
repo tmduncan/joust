@@ -1,10 +1,8 @@
 package com.joust.codalot.domain;
 
-public class Knight {
+public class Knight extends Citizen {
     private int xp;
     private int stamina;
-    private boolean isInTavern;
-    private boolean isInTrainingYard;
 
     public Knight() {
         xp = 0;
@@ -35,38 +33,26 @@ public class Knight {
         this.stamina += stamina;
     }
 
-    public boolean isInTavern() {
-        return isInTavern;
-    }
-
-    public void setInTavern(boolean isInTavern) {
-        this.isInTavern = isInTavern;
-    }
-
-    public boolean isInTrainingYard() {
-        return isInTrainingYard;
-    }
-
-    public void setInTrainingYard(boolean isInTrainingYard) {
-        this.isInTrainingYard = isInTrainingYard;
-    }
-
-    public static class KnightBuilder{
+    public static class KnightBuilder {
 
         Knight knight = new Knight();
 
-        KnightBuilder withXp(int xp){
+        KnightBuilder withXp(int xp) {
             this.knight.setXp(xp);
             return this;
         }
 
-        KnightBuilder withStamina(int stamina){
+        KnightBuilder withStamina(int stamina) {
             this.knight.setStamina(stamina);
             return this;
         }
 
+        KnightBuilder withPosition(Position position) {
+            this.knight.setPosition(position);
+            return this;
+        }
 
-        Knight build(){
+        Knight build() {
             return this.knight;
         }
 

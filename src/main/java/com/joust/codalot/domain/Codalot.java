@@ -15,20 +15,18 @@ public class Codalot {
 
     public void addKnightToTrainingYard(Knight knight) {
         knights.add(knight);
-        knight.setInTrainingYard(true);
-        knight.setInTavern(false);
+        knight.setPosition(Position.TRAINING_YARD);
     }
 
     public void addKnightToTavern(Knight knight) {
         knights.add(knight);
-        knight.setInTavern(true);
-        knight.setInTrainingYard(false);
+        knight.setPosition(Position.TAVERN);
     }
 
     public void process() {
         for (Knight knight : knights) {
-            knight.incrementStamina(knight.isInTavern() ? 1 : -1);
-            knight.incrementXp(knight.isInTrainingYard() ? 1 : 0);
+            knight.incrementStamina(knight.isInPostion(Position.TAVERN) ? 1 : -1);
+            knight.incrementXp((knight.isInPostion(Position.TRAINING_YARD)) ? 1 : 0);
         }
     }
 
