@@ -10,6 +10,8 @@ import java.util.List;
 
 import static com.joust.codalot.domain.Position.TAVERN;
 import static com.joust.codalot.domain.Position.TRAINING_YARD;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
 public class CodalotTest {
 
@@ -29,6 +31,7 @@ public class CodalotTest {
 
         codalot.process();
 
-        assert(codalot.calculateEarnedXp() == 4);
+        assertThat(codalot.calculateEarnedXp(), is(4));
+
     }
 }

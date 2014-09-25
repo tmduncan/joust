@@ -2,11 +2,16 @@ package com.joust.codalot;
 
 import com.joust.codalot.domain.Codalot;
 import com.joust.codalot.domain.Knight;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import sun.rmi.runtime.Log;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 public class Main {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
     private Main() { }
 
@@ -33,11 +38,7 @@ public class Main {
         }
         codalot.grantBonusXp();
 
-        int totalXp = 0;
-        for (Knight knight : knights) {
-            totalXp += knight.getXp();
-        }
-        System.out.println(String.format("Total XP earned by all %d knights: %d", knights.size(), totalXp));
+        LOG.info("Total XP earned by all {} knights: {}", knights.size(), codalot.calculateEarnedXp());
     }
 
 
