@@ -1,8 +1,12 @@
 package com.joust.codalot.test;
 
+import org.junit.Test;
+
 public class CodalotTest {
 
-    public static void main(String args[]) {
+
+    @Test
+    public void thatXpIsCalculatedCorrectly(){
         Codalot codalot = new BasicCodalot();
 
         codalot.setKnight(0, KnightPosition.TAVERN);
