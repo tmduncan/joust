@@ -1,53 +1,12 @@
-package com.joust.codalot.test;
-
-import com.joust.codalot.domain.Knight;
-import com.joust.codalot.domain.Position;
+package com.joust.codalot.domain;
 
 import java.util.ArrayList;
 
-public class BasicCodalot implements Codalot{
-
+public class Codalot {
     private ArrayList<Knight> knights;
 
-    public BasicCodalot() {
+    public Codalot() {
         knights = new ArrayList<>();
-        for (int i = 0; i < 6; ++i) {
-            knights.add(new Knight());
-        }
-    }
-
-    @Override
-    public void setKnight(int id, Position position) {
-        Knight knight = knights.get(id);
-        knight.setInTavern(false);
-        knight.setInTrainingYard(false);
-        switch (position) {
-            case TAVERN: {
-                knight.setInTavern(true);
-                break;
-            }
-            case TRAINING_YARD: {
-                knight.setInTrainingYard(true);
-                break;
-            }
-        }
-    }
-
-    @Override
-    public void process() {
-        for (Knight knight : knights) {
-            knight.incrementStamina(knight.isInTavern() ? 1 : -1);
-            knight.incrementXp(knight.isInTrainingYard() ? 1 : 0);
-        }
-    }
-
-    @Override
-    public int calculateEarnedXp() {
-        int total = 0;
-        for (Knight knight : knights) {
-            total += knight.getXp();
-        }
-        return total;
     }
 
     public void clearKnights() {
@@ -64,6 +23,13 @@ public class BasicCodalot implements Codalot{
         knights.add(knight);
         knight.setInTavern(true);
         knight.setInTrainingYard(false);
+    }
+
+    public void process() {
+        for (Knight knight : knights) {
+            knight.incrementStamina(knight.isInTavern() ? 1 : -1);
+            knight.incrementXp(knight.isInTrainingYard() ? 1 : 0);
+        }
     }
 
     public void grantBonusXp() {
@@ -95,6 +61,4 @@ public class BasicCodalot implements Codalot{
             }
         }
     }
-
-
 }
