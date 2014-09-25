@@ -1,6 +1,7 @@
 package com.joust.codalot;
 
 import com.joust.codalot.domain.game.CodalotGameParameters;
+import com.joust.codalot.domain.game.CodalotGameResult;
 import com.joust.codalot.service.CodalotGameServiceImpl;
 import com.joust.codalot.service.CodalotGameService;
 import org.apache.commons.cli.*;
@@ -44,7 +45,8 @@ public class Main {
 
             LOG.debug("Starting Codalot");
             CodalotGameService gameService = new CodalotGameServiceImpl();
-            gameService.play(parameters);
+            CodalotGameResult result = gameService.play(parameters);
+            LOG.info(result.getMessage());
             LOG.debug("Finished Codalot");
         } catch (ParseException e) {
             LOG.error("Failed to parse comand line properties");

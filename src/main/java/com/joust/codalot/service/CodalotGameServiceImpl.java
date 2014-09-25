@@ -6,10 +6,12 @@ import com.joust.codalot.domain.game.CodalotGameParameters;
 import com.joust.codalot.domain.game.CodalotGameResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Random;
 
+@Service("codalotGameService")
 public class CodalotGameServiceImpl implements CodalotGameService {
     private static final Logger LOG = LoggerFactory.getLogger(CodalotGameServiceImpl.class);
     @Override
@@ -45,10 +47,8 @@ public class CodalotGameServiceImpl implements CodalotGameService {
         }
         codalot.grantBonusXp();
 
-        LOG.info("Total XP earned by all {} knights: {}", knights.size(), codalot.calculateEarnedXp());
-
+        gameResult.setMessage(String.format("Total XP earned by all %d knights: %d", knights.size(), codalot.calculateEarnedXp()));
         gameResult.setFinished(true);
-        gameResult.setCodalot(codalot);
 
         return gameResult;
     }

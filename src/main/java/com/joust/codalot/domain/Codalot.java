@@ -34,8 +34,14 @@ public class Codalot {
 
     public void process() {
         for (Knight knight : knights) {
-            knight.incrementStamina(knight.isInPostion(Position.TAVERN) ? 1 : -1);
-            knight.incrementXp((knight.isInPostion(Position.TRAINING_YARD)) ? 1 : 0);
+
+            if (knight.isInPostion(Position.DAMSEL_IN_DISTRESS_SITE)){
+                knight.incrementStamina(1);
+                knight.incrementXp(1);
+            } else {
+                knight.incrementStamina(knight.isInPostion(Position.TAVERN) ? 1 : -1);
+                knight.incrementXp((knight.isInPostion(Position.TRAINING_YARD)) ? 1 : 0);
+            }
         }
     }
 
@@ -73,6 +79,14 @@ public class Codalot {
         int total = 0;
         for (Knight knight : knights) {
             total += knight.getXp();
+        }
+        return total;
+    }
+
+    public int calculateEarnedStamina() {
+        int total = 0;
+        for (Knight knight : knights) {
+            total += knight.getStamina();
         }
         return total;
     }

@@ -18,7 +18,6 @@ public class CodalotGameServiceTest {
         CodalotGameResult result = underTest.play(null);
 
         assertNotNull(result);
-        assertNotNull(result.getCodalot());
 
         assertTrue(result.isFinished());
         assertThat(12, is(result.getKnightCount()));
@@ -32,7 +31,6 @@ public class CodalotGameServiceTest {
         CodalotGameResult result = underTest.play(parameters);
 
         assertNotNull(result);
-        assertNotNull(result.getCodalot());
 
         assertTrue(result.isFinished());
         assertThat(15, is(result.getKnightCount()));

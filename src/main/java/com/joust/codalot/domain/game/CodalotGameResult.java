@@ -1,20 +1,11 @@
 package com.joust.codalot.domain.game;
 
-import com.joust.codalot.domain.Codalot;
+import java.io.Serializable;
 
-public class CodalotGameResult{
+public class CodalotGameResult implements Serializable {
     private boolean finished = false;
     private int knightCount;
-
-    Codalot codalot;
-
-    public Codalot getCodalot() {
-        return codalot;
-    }
-
-    public void setCodalot(Codalot codalot) {
-        this.codalot = codalot;
-    }
+    private String message;
 
     public boolean isFinished() {
         return finished;
@@ -30,5 +21,13 @@ public class CodalotGameResult{
 
     public void setKnightCount(int knightCount) {
         this.knightCount = knightCount;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

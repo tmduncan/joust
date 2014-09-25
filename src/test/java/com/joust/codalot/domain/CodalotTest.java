@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.joust.codalot.domain.Position.DAMSEL_IN_DISTRESS_SITE;
 import static com.joust.codalot.domain.Position.TAVERN;
 import static com.joust.codalot.domain.Position.TRAINING_YARD;
 import static org.hamcrest.core.Is.is;
@@ -127,6 +128,18 @@ public class CodalotTest {
         underTest.process();
 
         assertThat(underTest.calculateEarnedXp(), is(1));
+    }
+
+    @Test
+    public void thatXpAndStaminaIsAwardedForSavingDamsel() {
+        givenKnightsInPosition(1, DAMSEL_IN_DISTRESS_SITE);
+
+        underTest.setKnights(knights);
+
+        underTest.process();
+
+        assertThat(underTest.calculateEarnedXp(), is(1));
+        assertThat(underTest.calculateEarnedStamina(), is(1));
     }
 
     private void givenKnightsInPosition(int knightCount, Position position){
