@@ -1,8 +1,5 @@
-package com.joust.codalot.test;
+package com.joust.codalot.domain;
 
-import com.joust.codalot.domain.Codalot;
-import com.joust.codalot.domain.Knight;
-import com.joust.codalot.domain.TestCodalotBuilder;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -15,9 +12,8 @@ import static org.junit.Assert.assertThat;
 
 public class CodalotTest {
 
-
     @Test
-    public void thatXpIsCalculatedCorrectly(){
+    public void thatXpIsCalculatedCorrectly() {
 
         List<Knight> knights = new ArrayList<>(6);
         knights.add(0, new Knight.KnightBuilder().withPosition(TAVERN).build());
