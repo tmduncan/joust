@@ -31,6 +31,12 @@ public class MainTest {
     }
 
     @Test
+    public void thatMainRunsWithLessThanMinimumKnights(){
+        int result = Main.main(new String[] {"-k", "10"});
+        assertThat(1, is(result));
+    }
+
+    @Test
     public void thatMainRunsHandlesBadArgument(){
         int result = Main.main(new String[] {"-k", "BLAHBLAH"});
         assertThat(1, is(result));

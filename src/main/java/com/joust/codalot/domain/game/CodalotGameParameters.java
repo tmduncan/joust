@@ -2,7 +2,7 @@ package com.joust.codalot.domain.game;
 
 public class CodalotGameParameters {
 
-    int knightCount = 6;
+    int knightCount = 12;
 
     public int getKnightCount() {
         return knightCount;

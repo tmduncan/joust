@@ -21,14 +21,14 @@ public class CodalotGameServiceTest {
         assertNotNull(result.getCodalot());
 
         assertTrue(result.isFinished());
-        assertThat(6, is(result.getKnightCount()));
+        assertThat(12, is(result.getKnightCount()));
     }
 
 
     @Test
     public void thatServiceWillPlayWithAcceptParameters() {
         CodalotGameParameters parameters = new CodalotGameParameters();
-        parameters.setKnightCount(12);
+        parameters.setKnightCount(15);
         CodalotGameResult result = underTest.play(parameters);
 
         assertNotNull(result);

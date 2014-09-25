@@ -34,7 +34,12 @@ public class Main {
             CodalotGameParameters parameters = new CodalotGameParameters();
             if (cmd.hasOption("k")) {
                 Integer knightCount = ((Number) cmd.getParsedOptionValue("k")).intValue();
-                parameters = new CodalotGameParameters.CodalotGameParametersBuilder().withKnightCount(knightCount).build();
+                if (knightCount >= 12){
+                    parameters = new CodalotGameParameters.CodalotGameParametersBuilder().withKnightCount(knightCount).build();
+                } else{
+                    LOG.error("Must have at least 12 knights");
+                    return 1;
+                }
             }
 
             LOG.debug("Starting Codalot");
