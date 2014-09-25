@@ -11,7 +11,11 @@ public class Codalot {
     }
 
     protected void setKnights(List<Knight> knights) {
-        this.knights = knights;
+        this.knights.addAll(knights);
+    }
+
+    protected void addKnight(Knight knight) {
+        this.knights.add(knight);
     }
 
     public void clearKnights() {

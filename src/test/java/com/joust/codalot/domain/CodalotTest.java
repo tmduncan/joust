@@ -1,5 +1,6 @@
 package com.joust.codalot.domain;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -11,79 +12,133 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class CodalotTest {
+    List<Knight> knights;
+    Codalot underTest;
+
+    @Before
+    public void setup(){
+        underTest = TestCodalotBuilder.createBasicCodalot();
+    }
+
 
     @Test
     public void thatXpIsCalculatedCorrectly() {
 
-        List<Knight> knights = new ArrayList<>(6);
-        knights.add(0, new Knight.KnightBuilder().withPosition(TAVERN).build());
-        knights.add(1, new Knight.KnightBuilder().withPosition(TAVERN).build());
-        knights.add(2, new Knight.KnightBuilder().withPosition(TRAINING_YARD).build());
-        knights.add(3, new Knight.KnightBuilder().withPosition(TRAINING_YARD).build());
-        knights.add(4, new Knight.KnightBuilder().withPosition(TRAINING_YARD).build());
-        knights.add(5, new Knight.KnightBuilder().withPosition(TRAINING_YARD).build());
+        givenKnightsInPosition(4, TAVERN);
 
-        Codalot codalot = TestCodalotBuilder.createBasicCodalotWithKnights(knights);
+        underTest.setKnights(knights);
+        underTest.process();
+        underTest.clearKnights();
 
-        codalot.process();
+        relocateKnights(knights, TRAINING_YARD);
+        underTest.setKnights(knights);
+        underTest.process();
 
-        assertThat(codalot.calculateEarnedXp(), is(4));
+
+        assertThat(underTest.calculateEarnedXp(), is(4));
 
     }
 
     @Test
     public void thatXpIsCalculatedWith3KnightBonusCorrectly() {
 
-        List<Knight> knights = new ArrayList<>(3);
-        knights.add(0, new Knight.KnightBuilder().withPosition(TRAINING_YARD).build());
-        knights.add(1, new Knight.KnightBuilder().withPosition(TRAINING_YARD).build());
-        knights.add(2, new Knight.KnightBuilder().withPosition(TRAINING_YARD).build());
+        givenKnightsInPosition(3, TAVERN);
 
-        Codalot codalot = TestCodalotBuilder.createBasicCodalotWithKnights(knights);
-
-        for (int i=0; i<3; i++){
-            codalot.process();
+        underTest.setKnights(knights);
+        for (int i = 0; i < 3; i++) {
+            underTest.process();
         }
-        codalot.grantBonusXp();
-        assertThat(codalot.calculateEarnedXp(), is(24));
+        underTest.clearKnights();
+
+        relocateKnights(knights, TRAINING_YARD);
+        underTest.setKnights(knights);
+
+        for (int i = 0; i < 3; i++) {
+            underTest.process();
+        }
+        underTest.grantBonusXp();
+        assertThat(underTest.calculateEarnedXp(), is(24));
     }
 
     @Test
     public void thatXpIsCalculatedWith5KnightBonusCorrectly() {
 
-        List<Knight> knights = new ArrayList<>(5);
-        knights.add(0, new Knight.KnightBuilder().withPosition(TRAINING_YARD).build());
-        knights.add(1, new Knight.KnightBuilder().withPosition(TRAINING_YARD).build());
-        knights.add(2, new Knight.KnightBuilder().withPosition(TRAINING_YARD).build());
-        knights.add(3, new Knight.KnightBuilder().withPosition(TRAINING_YARD).build());
-        knights.add(4, new Knight.KnightBuilder().withPosition(TRAINING_YARD).build());
+        givenKnightsInPosition(5, TAVERN);
 
-        Codalot codalot = TestCodalotBuilder.createBasicCodalotWithKnights(knights);
-
-        for (int i=0; i<3; i++){
-            codalot.process();
+        underTest.setKnights(knights);
+        for (int i = 0; i < 3; i++) {
+            underTest.process();
         }
-        codalot.grantBonusXp();
-        assertThat(codalot.calculateEarnedXp(), is(65));
+        underTest.clearKnights();
+
+        relocateKnights(knights, TRAINING_YARD);
+        underTest.setKnights(knights);
+
+        for (int i = 0; i < 3; i++) {
+            underTest.process();
+        }
+        underTest.grantBonusXp();
+        assertThat(underTest.calculateEarnedXp(), is(65));
     }
 
     @Test
     public void thatXpIsCalculatedWith6KnightBonusCorrectly() {
 
-        List<Knight> knights = new ArrayList<>(6);
-        knights.add(0, new Knight.KnightBuilder().withPosition(TRAINING_YARD).build());
-        knights.add(1, new Knight.KnightBuilder().withPosition(TRAINING_YARD).build());
-        knights.add(2, new Knight.KnightBuilder().withPosition(TRAINING_YARD).build());
-        knights.add(3, new Knight.KnightBuilder().withPosition(TRAINING_YARD).build());
-        knights.add(4, new Knight.KnightBuilder().withPosition(TRAINING_YARD).build());
-        knights.add(5, new Knight.KnightBuilder().withPosition(TRAINING_YARD).build());
+        givenKnightsInPosition(6, TAVERN);
 
-        Codalot codalot = TestCodalotBuilder.createBasicCodalotWithKnights(knights);
-
-        for (int i=0; i<3; i++){
-            codalot.process();
+        underTest.setKnights(knights);
+        for (int i = 0; i < 3; i++) {
+            underTest.process();
         }
-        codalot.grantBonusXp();
-        assertThat(codalot.calculateEarnedXp(), is(138));
+        underTest.clearKnights();
+
+        relocateKnights(knights, TRAINING_YARD);
+        underTest.setKnights(knights);
+
+        for (int i = 0; i < 3; i++) {
+            underTest.process();
+        }
+        underTest.grantBonusXp();
+        assertThat(underTest.calculateEarnedXp(), is(138));
+    }
+
+    @Test
+    public void thatXpIsNotAwardedWithoutStamina() {
+        givenKnightsInPosition(1, TRAINING_YARD);
+
+        underTest.setKnights(knights);
+
+        underTest.process();
+
+        assertThat(underTest.calculateEarnedXp(), is(0));
+    }
+
+    @Test
+    public void thatXpIsAwardedWithStamina() {
+        givenKnightsInPosition(1, TAVERN);
+
+        underTest.setKnights(knights);
+
+        underTest.process();
+        underTest.clearKnights();
+
+        relocateKnights(knights, TRAINING_YARD);
+        underTest.setKnights(knights);
+        underTest.process();
+
+        assertThat(underTest.calculateEarnedXp(), is(1));
+    }
+
+    private void givenKnightsInPosition(int knightCount, Position position){
+        knights = new ArrayList<>(knightCount);
+        for (int i=0; i<knightCount; i++){
+            knights.add(i, new Knight.KnightBuilder().withPosition(position).build());
+        }
+    }
+
+    private void relocateKnights(List<Knight> knights, Position position){
+        for (Knight knight : knights){
+            knight.setPosition(position);
+        }
     }
 }

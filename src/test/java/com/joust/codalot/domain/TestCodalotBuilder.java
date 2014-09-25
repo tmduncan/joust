@@ -10,5 +10,10 @@ public class TestCodalotBuilder {
         return codalot;
     }
 
+    public static Codalot createBasicCodalot(){
+        Codalot codalot = new Codalot();
+        return codalot;
+    }
+
 
 }

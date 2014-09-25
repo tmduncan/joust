@@ -18,7 +18,9 @@ public class Knight extends Citizen {
     }
 
     public void incrementXp(int xp) {
-        this.xp += xp;
+        if (getStamina() >= 0) {
+            this.xp += xp;
+        }
     }
 
     public int getStamina() {
