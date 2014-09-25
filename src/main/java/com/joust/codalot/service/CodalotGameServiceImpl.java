@@ -4,6 +4,8 @@ import com.joust.codalot.domain.Codalot;
 import com.joust.codalot.domain.Knight;
 import com.joust.codalot.domain.game.CodalotGameParameters;
 import com.joust.codalot.domain.game.CodalotGameResult;
+import com.joust.codalot.domain.game.GameDuration;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -13,9 +15,14 @@ import java.util.Random;
 
 @Service("codalotGameService")
 public class CodalotGameServiceImpl implements CodalotGameService {
+    private static int GAME_DURATION_DAYS = 1;
+
     private static final Logger LOG = LoggerFactory.getLogger(CodalotGameServiceImpl.class);
     @Override
     public CodalotGameResult play(CodalotGameParameters parameters) {
+
+        DateTime gameStart = DateTime.now();
+        GameDuration gameDuration = new GameDuration(gameStart, gameStart.plusDays(GAME_DURATION_DAYS));
 
         CodalotGameResult gameResult = new CodalotGameResult();
 
@@ -33,7 +40,9 @@ public class CodalotGameServiceImpl implements CodalotGameService {
         }
 
         Random random = new Random(1);
-        for (int i = 0; i < 24; ++i) {
+
+        for (DateTime date : gameDuration)
+        {
             codalot.clearKnights();
             for (Knight knight : knights) {
                 int randomVal = random.nextInt(2);
@@ -45,6 +54,7 @@ public class CodalotGameServiceImpl implements CodalotGameService {
             }
             codalot.process();
         }
+
         codalot.grantBonusXp();
 
         gameResult.setMessage(String.format("Total XP earned by all %d knights: %d", knights.size(), codalot.calculateEarnedXp()));

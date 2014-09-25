@@ -4,6 +4,8 @@ import com.joust.codalot.domain.game.CodalotGameParameters;
 import com.joust.codalot.domain.game.CodalotGameResult;
 import com.joust.codalot.service.CodalotGameServiceImpl;
 import com.joust.codalot.service.CodalotGameService;
+import com.joust.codalot.util.ExitHelper;
+import com.joust.codalot.util.ExitHelperImpl;
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,11 +14,13 @@ public class Main {
 
     private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
-    private Main() {
+    ExitHelper exitHelper;
+
+    protected Main(ExitHelper exitHelper) {
+        setExitHelper(exitHelper);
     }
 
-    public static int main(String[] args) {
-
+    public void run(String[] args){
         Options options = new Options();
         CommandLineParser parser = new BasicParser();
 
@@ -39,7 +43,8 @@ public class Main {
                     parameters = new CodalotGameParameters.CodalotGameParametersBuilder().withKnightCount(knightCount).build();
                 } else{
                     LOG.error("Must have at least 12 knights");
-                    return 1;
+                    exitHelper.exit(1);
+                    return;
                 }
             }
 
@@ -50,12 +55,24 @@ public class Main {
             LOG.debug("Finished Codalot");
         } catch (ParseException e) {
             LOG.error("Failed to parse comand line properties");
-            return 1;
+            exitHelper.exit(1);
+            return;
         }
 
-        return 0;
+        exitHelper.exit(0);
 
     }
 
+    public static void main(String[] args) {
+        Main app = new Main(new ExitHelperImpl());
+        app.run(args);
+    }
 
+    public ExitHelper getExitHelper() {
+        return exitHelper;
+    }
+
+    public void setExitHelper(ExitHelper exitHelper) {
+        this.exitHelper = exitHelper;
+    }
 }
