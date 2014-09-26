@@ -29,14 +29,32 @@ public class MainTest {
     }
 
     @Test
-    public void thatMainRunsWithShortArgument() {
+    public void thatMainRunsWithKnightsShortArgument() {
         underTest.run(new String[]{"-k", "12"});
         assertThat(underTest.getExitHelper().getExitStatus(), is(0));
     }
 
     @Test
-    public void thatMainRunsHandlesLongArgument() {
+    public void thatMainRunsHandlesKnightsLongArgument() {
         underTest.run(new String[]{"--knights", "15"});
+        assertThat(underTest.getExitHelper().getExitStatus(), is(0));
+    }
+
+    @Test
+    public void thatMainRunsWithDaysShortArgument() {
+        underTest.run(new String[]{"-d", "1"});
+        assertThat(underTest.getExitHelper().getExitStatus(), is(0));
+    }
+
+    @Test
+    public void thatMainRunsWithDaysLongArgument() {
+        underTest.run(new String[]{"--days", "1"});
+        assertThat(underTest.getExitHelper().getExitStatus(), is(0));
+    }
+
+    @Test
+    public void thatMainRunsWithDaysMoreThanOneDay() {
+        underTest.run(new String[]{"-d", "2"});
         assertThat(underTest.getExitHelper().getExitStatus(), is(0));
     }
 
@@ -53,8 +71,14 @@ public class MainTest {
     }
 
     @Test
-    public void thatMainRunsHandlesBadArgument() {
+    public void thatMainRunsHandlesBadArgumentValue() {
         underTest.run(new String[]{"-k", "BLAHBLAH"});
+        assertThat(underTest.getExitHelper().getExitStatus(), is(1));
+    }
+
+    @Test
+    public void thatMainRunsHandlesBadArgument() {
+        underTest.run(new String[]{"-q", "BLAHBLAH"});
         assertThat(underTest.getExitHelper().getExitStatus(), is(1));
     }
 

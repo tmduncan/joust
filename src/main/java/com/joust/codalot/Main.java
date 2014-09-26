@@ -20,7 +20,7 @@ public class Main {
         setExitHelper(exitHelper);
     }
 
-    public void run(String[] args){
+    public void run(String[] args) {
         Options options = new Options();
         CommandLineParser parser = new BasicParser();
 
@@ -30,23 +30,47 @@ public class Main {
                 .hasArg()
                 .create("k"));
 
+        options.addOption(OptionBuilder.withLongOpt("days")
+                .withDescription("How many days to play the game")
+                .withType(Number.class)
+                .hasArg()
+                .create("d"));
+
         CommandLine cmd = null;
 
         try {
             cmd = parser.parse(options, args);
 
 
-            CodalotGameParameters parameters = new CodalotGameParameters();
+            CodalotGameParameters parameters;
+            Integer knightCount = null;
+            Integer gameDurationDays = null;
+
             if (cmd.hasOption("k")) {
-                Integer knightCount = ((Number) cmd.getParsedOptionValue("k")).intValue();
-                if (knightCount >= 12){
-                    parameters = new CodalotGameParameters.CodalotGameParametersBuilder().withKnightCount(knightCount).build();
-                } else{
+                Integer knightCountArg = ((Number) cmd.getParsedOptionValue("k")).intValue();
+                if (knightCountArg >= 12) {
+                    knightCount = knightCountArg;
+                } else {
                     LOG.error("Must have at least 12 knights");
                     exitHelper.exit(1);
                     return;
                 }
             }
+
+            if (cmd.hasOption("d")) {
+                Integer gameDurationDaysArg = ((Number) cmd.getParsedOptionValue("d")).intValue();
+                if (gameDurationDaysArg >= 0) {
+                    gameDurationDays = gameDurationDaysArg;
+                } else {
+                    LOG.error("Must play for at least 1 day");
+                    exitHelper.exit(1);
+                    return;
+                }
+            }
+            parameters = new CodalotGameParameters.CodalotGameParametersBuilder()
+                    .withKnightCount(knightCount)
+                    .withGameDurationDays(gameDurationDays)
+                    .build();
 
             LOG.debug("Starting Codalot");
             CodalotGameService gameService = new CodalotGameServiceImpl();

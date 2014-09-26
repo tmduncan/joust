@@ -15,20 +15,21 @@ import java.util.Random;
 
 @Service("codalotGameService")
 public class CodalotGameServiceImpl implements CodalotGameService {
-    private static int GAME_DURATION_DAYS = 1;
 
     private static final Logger LOG = LoggerFactory.getLogger(CodalotGameServiceImpl.class);
+
     @Override
     public CodalotGameResult play(CodalotGameParameters parameters) {
 
-        DateTime gameStart = DateTime.now();
-        GameDuration gameDuration = new GameDuration(gameStart, gameStart.plusDays(GAME_DURATION_DAYS));
 
         CodalotGameResult gameResult = new CodalotGameResult();
 
-        if (null == parameters){
+        if (null == parameters) {
             parameters = new CodalotGameParameters();
         }
+
+        DateTime gameStart = DateTime.now();
+        GameDuration gameDuration = new GameDuration(gameStart, gameStart.plusDays(parameters.getGameDurationDays()));
 
         gameResult.setKnightCount(parameters.getKnightCount());
 
@@ -41,8 +42,7 @@ public class CodalotGameServiceImpl implements CodalotGameService {
 
         Random random = new Random(1);
 
-        for (DateTime dateHour : gameDuration)
-        {
+        for (DateTime dateHour : gameDuration) {
             codalot.clearKnights();
             for (Knight knight : knights) {
 
@@ -54,11 +54,15 @@ public class CodalotGameServiceImpl implements CodalotGameService {
                 }
             }
             codalot.process(dateHour);
+            gameResult.incrementHourPlayed();
         }
 
         codalot.grantBonusXp();
 
-        gameResult.setMessage(String.format("Total XP earned by all %d knights: %d", knights.size(), codalot.calculateEarnedXp()));
+        gameResult.setMessage(String.format("Total XP earned by all %d knights: %d played over %d days",
+                knights.size(),
+                codalot.calculateEarnedXp(),
+                gameDuration.getGameInterval()));
         gameResult.setFinished(true);
 
         return gameResult;

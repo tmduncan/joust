@@ -33,7 +33,22 @@ public class CodalotGameServiceTest {
         assertNotNull(result);
 
         assertTrue(result.isFinished());
-        assertThat(15, is(result.getKnightCount()));
+        assertThat(result.getKnightCount(), is(15));
+        assertThat(result.getGameDurationHours(), is(24));
+    }
+
+    @Test
+    public void thatServiceWillPlayMultipleDays() {
+        CodalotGameParameters parameters = new CodalotGameParameters();
+        parameters.setKnightCount(1);
+        parameters.setGameDurationDays(2);
+        CodalotGameResult result = underTest.play(parameters);
+
+        assertNotNull(result);
+
+        assertTrue(result.isFinished());
+        assertThat(result.getKnightCount(), is(1));
+        assertThat(result.getGameDurationHours(), is(48));
     }
 
 

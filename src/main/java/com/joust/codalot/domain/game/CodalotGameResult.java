@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class CodalotGameResult implements Serializable {
     private boolean finished = false;
     private int knightCount;
+    private int gameDurationHours;
     private String message;
 
     public boolean isFinished() {
@@ -22,6 +23,16 @@ public class CodalotGameResult implements Serializable {
     public void setKnightCount(int knightCount) {
         this.knightCount = knightCount;
     }
+
+    public int getGameDurationHours() {
+        return gameDurationHours;
+    }
+
+    public void incrementHourPlayed() {
+        this.gameDurationHours++;
+    }
+
+
 
     public String getMessage() {
         return message;

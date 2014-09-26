@@ -1,6 +1,7 @@
 package com.joust.codalot.domain.game;
 
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -13,6 +14,10 @@ public class GameDuration implements Iterable<DateTime> {
                         DateTime end) {
         this.start = start;
         this.end = end;
+    }
+
+    public int getGameInterval(){
+        return Days.daysBetween(start.toDateTime(), end.toDateTime()).getDays();
     }
 
     public Iterator<DateTime> iterator()
