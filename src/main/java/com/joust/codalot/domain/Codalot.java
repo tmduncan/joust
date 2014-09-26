@@ -31,6 +31,16 @@ public class Codalot {
         citizen.setPosition(Position.TRAINING_YARD);
     }
 
+    public void addCitizenToRoundTable(Citizen citizen) {
+        citizens.add(citizen);
+        citizen.setPosition(Position.ROUND_TABLE);
+    }
+
+    public void addCitizenToDamselInDistressSite(Citizen citizen) {
+        citizens.add(citizen);
+        citizen.setPosition(Position.DAMSEL_IN_DISTRESS_SITE);
+    }
+
     public void addCitizenToTavern(Citizen citizen) {
         citizens.add(citizen);
         citizen.setPosition(Position.TAVERN);
@@ -62,6 +72,8 @@ public class Codalot {
             if (citizen.isInPostion(Position.DAMSEL_IN_DISTRESS_SITE)) {
                 citizen.incrementStamina(1);
                 citizen.incrementXp(1);
+            } else if (citizen.isInPostion(Position.ROUND_TABLE)){
+                citizen.incrementRoundTableVisit(1);
             } else {
                 citizen.incrementStamina(citizen.isInPostion(Position.TAVERN) ? 1 : -1);
                 citizen.incrementXp((citizen.isInPostion(Position.TRAINING_YARD)) ? 1 : 0);

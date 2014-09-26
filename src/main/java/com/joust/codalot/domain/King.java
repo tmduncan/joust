@@ -1,15 +1,14 @@
 package com.joust.codalot.domain;
 
 public class King extends Citizen {
+
     public King() {
         setXp(0);
         setStamina(0);
     }
 
-
-
     @Override
-    boolean isRoyalty() {
+    public boolean isRoyalty() {
         return true;
     }
 

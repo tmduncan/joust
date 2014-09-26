@@ -1,6 +1,5 @@
 package com.joust.codalot.domain;
 
-import javafx.geometry.Pos;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,9 +7,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.joust.codalot.domain.Position.DAMSEL_IN_DISTRESS_SITE;
-import static com.joust.codalot.domain.Position.TAVERN;
-import static com.joust.codalot.domain.Position.TRAINING_YARD;
+import static com.joust.codalot.domain.Position.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -27,7 +24,7 @@ public class CodalotTest {
     @Test
     public void thatXpIsCalculatedCorrectly() {
 
-        givenKnightsInPosition(4, TAVERN);
+        givenKnightsInPositionWithRoundTableXP(4, TAVERN);
 
         underTest.setCitizens(citizens);
         underTest.process();
@@ -45,7 +42,7 @@ public class CodalotTest {
     @Test
     public void thatXpIsCalculatedWith3KnightBonusCorrectly() {
 
-        givenKnightsInPosition(3, TAVERN);
+        givenKnightsInPositionWithRoundTableXP(3, TAVERN);
 
         underTest.setCitizens(citizens);
         for (int i = 0; i < 3; i++) {
@@ -66,7 +63,7 @@ public class CodalotTest {
     @Test
     public void thatXpIsCalculatedWith5KnightBonusCorrectly() {
 
-        givenKnightsInPosition(5, TAVERN);
+        givenKnightsInPositionWithRoundTableXP(5, TAVERN);
 
         underTest.setCitizens(citizens);
         for (int i = 0; i < 3; i++) {
@@ -87,7 +84,7 @@ public class CodalotTest {
     @Test
     public void thatXpIsCalculatedWith6KnightBonusCorrectly() {
 
-        givenKnightsInPosition(6, TAVERN);
+        givenKnightsInPositionWithRoundTableXP(6, TAVERN);
 
         underTest.setCitizens(citizens);
         for (int i = 0; i < 3; i++) {
@@ -107,7 +104,7 @@ public class CodalotTest {
 
     @Test
     public void thatXpIsNotAwardedWithoutStamina() {
-        givenKnightsInPosition(1, TRAINING_YARD);
+        givenKnightsInPositionWithRoundTableXP(1, TRAINING_YARD);
 
         underTest.setCitizens(citizens);
 
@@ -118,7 +115,7 @@ public class CodalotTest {
 
     @Test
     public void thatXpIsAwardedWithStamina() {
-        givenKnightsInPosition(1, TAVERN);
+        givenKnightsInPositionWithRoundTableXP(1, TAVERN);
 
         underTest.setCitizens(citizens);
 
@@ -134,7 +131,7 @@ public class CodalotTest {
 
     @Test
     public void thatXpAndStaminaIsAwardedForSavingDamsel() {
-        givenKnightsInPosition(1, DAMSEL_IN_DISTRESS_SITE);
+        givenKnightsInPositionWithRoundTableXP(1, DAMSEL_IN_DISTRESS_SITE);
 
         underTest.setCitizens(citizens);
 
@@ -146,7 +143,7 @@ public class CodalotTest {
 
     @Test
     public void thatXpIsNotAwardedForNegativeStaminaWithSameDay() {
-        givenKnightsInPosition(1, TRAINING_YARD);
+        givenKnightsInPositionWithRoundTableXP(1, TRAINING_YARD);
 
         underTest.setCitizens(citizens);
 
@@ -184,7 +181,7 @@ public class CodalotTest {
 
     @Test
     public void thatXpIsAwardedForNegativeStaminaNextDay() {
-        givenKnightsInPosition(1, TRAINING_YARD);
+        givenKnightsInPositionWithRoundTableXP(1, TRAINING_YARD);
 
         underTest.setCitizens(citizens);
 
@@ -237,7 +234,7 @@ public class CodalotTest {
 
     @Test
     public void thatXpIsCalculatedSepareatlyForRoyals() {
-        givenKnightsInPosition(1, TAVERN);
+        givenKnightsInPositionWithRoundTableXP(1, TAVERN);
         citizens.add(givenValidKingInPosition(TAVERN));
 
         underTest.setCitizens(citizens);
@@ -253,10 +250,94 @@ public class CodalotTest {
         assertThat(underTest.calculateRoyalEarnedXp(), is(1));
     }
 
+    @Test
+    public void thatBonusXpIsCalculatedToIncludeRoyals() {
+
+        givenKnightsInPositionWithRoundTableXP(2, TAVERN);
+        citizens.add(givenValidKingInPosition(TAVERN));
+
+        underTest.setCitizens(citizens);
+        for (int i = 0; i < 3; i++) {
+            underTest.process();
+        }
+        underTest.clearCitizens();
+
+        relocateCitizens(citizens, TRAINING_YARD);
+        underTest.setCitizens(citizens);
+
+        for (int i = 0; i < 3; i++) {
+            underTest.process();
+        }
+        underTest.grantBonusXp();
+        assertThat(underTest.calculateEarnedXp(), is(16));
+        assertThat(underTest.calculateRoyalEarnedXp(), is(8));
+    }
+
+    @Test
+    public void thatXpIsCalculatedCorrectlyWithoutRoundTableXP() {
+
+        givenKnightsInPosition(1, TAVERN);
+
+        underTest.setCitizens(citizens);
+        for (int i = 0; i < 3; i++) {
+            underTest.process();
+        }
+        underTest.clearCitizens();
+
+        relocateCitizens(citizens, TRAINING_YARD);
+        underTest.setCitizens(citizens);
+
+        for (int i = 0; i < 3; i++) {
+            underTest.process();
+        }
+        underTest.grantBonusXp();
+        assertThat(underTest.calculateEarnedXp(), is(0));
+
+    }
+
+    @Test
+    public void thatXpIsCalculatedCorrectlyWithRoundTableXP() {
+
+        givenKnightsInPosition(1, ROUND_TABLE);
+
+        underTest.setCitizens(citizens);
+        for (int i = 0; i < 3; i++) {
+            underTest.process();
+        }
+        underTest.clearCitizens();
+
+        relocateCitizens(citizens, TAVERN);
+        underTest.setCitizens(citizens);
+
+        underTest.process();
+        underTest.clearCitizens();
+
+        relocateCitizens(citizens, TRAINING_YARD);
+        underTest.setCitizens(citizens);
+
+        underTest.process();
+
+        underTest.grantBonusXp();
+        assertThat(underTest.calculateEarnedXp(), is(1));
+
+    }
+
     private void givenKnightsInPosition(int knightCount, Position position) {
         citizens = new ArrayList<>(knightCount);
         for (int i = 0; i < knightCount; i++) {
             citizens.add(i, givenValidKnightInPosition(position));
+        }
+    }
+
+    private void givenKnightsInPositionWithRoundTableXP(int knightCount, Position position) {
+        givenKnightsInPosition(knightCount, position);
+        givenRoundTableXPGranted();
+    }
+
+    private void givenRoundTableXPGranted() {
+        for (Citizen citizen : citizens) {
+            citizen.setRoundTableGranted(true);
+            citizen.setHoursAtRoundTable(3);
         }
     }
 

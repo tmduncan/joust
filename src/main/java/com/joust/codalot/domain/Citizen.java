@@ -4,6 +4,7 @@ public abstract class Citizen {
     private int xp;
     private int stamina;
     private boolean exhausted;
+    private int hoursAtRoundTable = 0;
 
     private Position position;
 
@@ -15,7 +16,7 @@ public abstract class Citizen {
         this.position = position;
     }
 
-    public boolean isInPostion(Position position){
+    public boolean isInPostion(Position position) {
         return getPosition().equals(position);
     }
 
@@ -43,14 +44,33 @@ public abstract class Citizen {
         this.exhausted = exhausted;
     }
 
-    public void wakeUp(){
+    public int getHoursAtRoundTable() {
+        return hoursAtRoundTable;
+    }
+
+    public void setHoursAtRoundTable(int hoursAtRoundTable) {
+        this.hoursAtRoundTable = hoursAtRoundTable;
+    }
+
+    public void wakeUp() {
         setExhausted(false);
+
+        if (!isRoundTableGranted()) {
+            setHoursAtRoundTable(0);
+        }
     }
 
     public void incrementXp(int xp) {
-        if (getStamina() >= 0 && !isExhausted()) {
-            setXp(getXp() + xp);
+        if (isRoyalty() || getHoursAtRoundTable() >= 3) {
+            if (getStamina() >= 0 && !isExhausted()) {
+                setXp(getXp() + xp);
+            }
         }
+    }
+
+    public void incrementRoundTableVisit(int visit) {
+        setHoursAtRoundTable(getHoursAtRoundTable() + visit);
+
     }
 
     public void incrementStamina(int stamina) {
@@ -60,5 +80,17 @@ public abstract class Citizen {
         }
     }
 
-    abstract boolean isRoyalty();
+    public abstract boolean isRoyalty();
+
+
+    //For Testing
+    private boolean roundTableGranted;
+
+    protected boolean isRoundTableGranted() {
+        return roundTableGranted;
+    }
+
+    protected void setRoundTableGranted(boolean roundTableGranted) {
+        this.roundTableGranted = roundTableGranted;
+    }
 }

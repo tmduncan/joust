@@ -53,11 +53,21 @@ public class CodalotGameServiceImpl implements CodalotGameService {
             codalot.clearCitizens();
             for (Citizen citizen : citizens) {
 
-                int randomVal = random.nextInt(2);
+                int randomVal;
+
+                if(citizen.isRoyalty()){
+                    randomVal = random.nextInt(3);
+                } else {
+                    randomVal = random.nextInt(4);
+                }
                 if (randomVal == 0) {
                     codalot.addCitizenToTrainingYard(citizen);
                 } else if (randomVal == 1) {
                     codalot.addCitizenToTavern(citizen);
+                } else if (randomVal == 2) {
+                    codalot.addCitizenToDamselInDistressSite(citizen);
+                } else if (randomVal == 3) {
+                    codalot.addCitizenToRoundTable(citizen);
                 }
             }
             codalot.process(dateHour);
