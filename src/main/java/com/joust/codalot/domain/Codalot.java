@@ -1,13 +1,17 @@
 package com.joust.codalot.domain;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Codalot {
     private List<Knight> knights;
+    private DateTime yeOldeGameDateTime;
 
-    public Codalot() {
+    public Codalot(DateTime yeOldeGameDateTime) {
         knights = new ArrayList<>();
+        setYeOldeGameDateTime(yeOldeGameDateTime);
     }
 
     protected void setKnights(List<Knight> knights) {
@@ -32,8 +36,28 @@ public class Codalot {
         knight.setPosition(Position.TAVERN);
     }
 
-    public void process() {
+    public DateTime getYeOldeGameDateTime() {
+        return yeOldeGameDateTime;
+    }
+
+    public void setYeOldeGameDateTime(DateTime yeOldeGameDateTime) {
+        this.yeOldeGameDateTime = yeOldeGameDateTime;
+    }
+
+    public boolean isNewDayInTheKingdom(DateTime dateTime){
+        boolean retValue = true;
+        if (dateTime.withTimeAtStartOfDay().isEqual(yeOldeGameDateTime.withTimeAtStartOfDay())){
+            retValue = false;
+        }
+        yeOldeGameDateTime = dateTime;
+        return retValue;
+    }
+
+    public void process(DateTime dateHour) {
         for (Knight knight : knights) {
+            if (isNewDayInTheKingdom(dateHour)){
+                knight.wakeUp();
+            }
 
             if (knight.isInPostion(Position.DAMSEL_IN_DISTRESS_SITE)){
                 knight.incrementStamina(1);
@@ -89,5 +113,10 @@ public class Codalot {
             total += knight.getStamina();
         }
         return total;
+    }
+
+    //For testing
+    protected void process() {
+        this.process(DateTime.now());
     }
 }

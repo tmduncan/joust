@@ -32,7 +32,7 @@ public class CodalotGameServiceImpl implements CodalotGameService {
 
         gameResult.setKnightCount(parameters.getKnightCount());
 
-        Codalot codalot = new Codalot();
+        Codalot codalot = new Codalot(gameStart);
 
         ArrayList<Knight> knights = new ArrayList<>();
         for (int i = 0; i < parameters.getKnightCount(); ++i) {
@@ -41,10 +41,11 @@ public class CodalotGameServiceImpl implements CodalotGameService {
 
         Random random = new Random(1);
 
-        for (DateTime date : gameDuration)
+        for (DateTime dateHour : gameDuration)
         {
             codalot.clearKnights();
             for (Knight knight : knights) {
+
                 int randomVal = random.nextInt(2);
                 if (randomVal == 0) {
                     codalot.addKnightToTrainingYard(knight);
@@ -52,7 +53,7 @@ public class CodalotGameServiceImpl implements CodalotGameService {
                     codalot.addKnightToTavern(knight);
                 }
             }
-            codalot.process();
+            codalot.process(dateHour);
         }
 
         codalot.grantBonusXp();

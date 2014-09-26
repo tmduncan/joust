@@ -1,5 +1,6 @@
 package com.joust.codalot.domain;
 
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -140,6 +141,84 @@ public class CodalotTest {
 
         assertThat(underTest.calculateEarnedXp(), is(1));
         assertThat(underTest.calculateEarnedStamina(), is(1));
+    }
+
+    @Test
+    public void thatXpIsNotAwardedForNegativeStaminaWithSameDay() {
+        givenKnightsInPosition(1, TRAINING_YARD);
+
+        underTest.setKnights(knights);
+
+        //Day 1 - Hour 1
+        underTest.process(underTest.getYeOldeGameDateTime());
+
+        assertThat(underTest.calculateEarnedXp(), is(0));
+        assertThat(underTest.calculateEarnedStamina(), is(-1));
+
+        //Day 1 - Hour 2
+        relocateKnights(knights, TAVERN);
+        DateTime nextHour = underTest.getYeOldeGameDateTime().plusHours(1);
+        underTest.process(nextHour);
+
+        assertThat(underTest.calculateEarnedXp(), is(0));
+        assertThat(underTest.calculateEarnedStamina(), is(0));
+
+        //Day 1 - Hour 3
+        relocateKnights(knights, TAVERN);
+        nextHour = underTest.getYeOldeGameDateTime().plusHours(1);
+        underTest.process(nextHour);
+
+        assertThat(underTest.calculateEarnedXp(), is(0));
+        assertThat(underTest.calculateEarnedStamina(), is(1));
+
+        //Day 1 - Hour 4
+        relocateKnights(knights, TAVERN);
+        nextHour = underTest.getYeOldeGameDateTime().plusHours(1);
+        underTest.process(nextHour);
+
+        assertThat(underTest.calculateEarnedXp(), is(0));
+        assertThat(underTest.calculateEarnedStamina(), is(2));
+
+    }
+
+    @Test
+    public void thatXpIsAwardedForNegativeStaminaNextDay() {
+        givenKnightsInPosition(1, TRAINING_YARD);
+
+        underTest.setKnights(knights);
+
+        //Day 1 - Hour 1
+        underTest.process(underTest.getYeOldeGameDateTime());
+
+        assertThat(underTest.calculateEarnedXp(), is(0));
+        assertThat(underTest.calculateEarnedStamina(), is(-1));
+
+        //Day 1 - Hour 2
+        relocateKnights(knights, TAVERN);
+        DateTime nextHour = underTest.getYeOldeGameDateTime().plusHours(1);
+        underTest.process(nextHour);
+
+        assertThat(underTest.calculateEarnedXp(), is(0));
+        assertThat(underTest.calculateEarnedStamina(), is(0));
+
+        //Day 2 - Hour 1
+        relocateKnights(knights, TAVERN);
+        nextHour = underTest.getYeOldeGameDateTime().plusDays(1);
+        underTest.process(nextHour);
+
+        assertThat(underTest.calculateEarnedXp(), is(0));
+        assertThat(underTest.calculateEarnedStamina(), is(1));
+
+        //Day 2 - Hour 2
+        relocateKnights(knights, TRAINING_YARD);
+        nextHour = underTest.getYeOldeGameDateTime().plusHours(1);
+        underTest.process(nextHour);
+
+        assertThat(underTest.calculateEarnedXp(), is(1));
+        assertThat(underTest.calculateEarnedStamina(), is(0));
+
+
+
     }
 
     private void givenKnightsInPosition(int knightCount, Position position){

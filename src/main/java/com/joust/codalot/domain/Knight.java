@@ -3,6 +3,7 @@ package com.joust.codalot.domain;
 public class Knight extends Citizen {
     private int xp;
     private int stamina;
+    private boolean exhausted;
 
     public Knight() {
         xp = 0;
@@ -18,7 +19,7 @@ public class Knight extends Citizen {
     }
 
     public void incrementXp(int xp) {
-        if (getStamina() >= 0) {
+        if (getStamina() >= 0  && !isExhausted()) {
             this.xp += xp;
         }
     }
@@ -31,8 +32,23 @@ public class Knight extends Citizen {
         this.stamina = stamina;
     }
 
+    public boolean isExhausted() {
+        return exhausted;
+    }
+
+    public void setExhausted(boolean exhausted) {
+        this.exhausted = exhausted;
+    }
+
     public void incrementStamina(int stamina) {
         this.stamina += stamina;
+        if (getStamina() < 0){
+            setExhausted(true);
+        }
+    }
+
+    public void wakeUp(){
+        setExhausted(false);
     }
 
     public static class KnightBuilder {
