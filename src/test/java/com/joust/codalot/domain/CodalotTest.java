@@ -1,5 +1,6 @@
 package com.joust.codalot.domain;
 
+import javafx.geometry.Pos;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,11 +15,11 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class CodalotTest {
-    List<Knight> knights;
+    List<Citizen> citizens;
     Codalot underTest;
 
     @Before
-    public void setup(){
+    public void setup() {
         underTest = TestCodalotBuilder.createBasicCodalot();
     }
 
@@ -28,12 +29,12 @@ public class CodalotTest {
 
         givenKnightsInPosition(4, TAVERN);
 
-        underTest.setKnights(knights);
+        underTest.setCitizens(citizens);
         underTest.process();
-        underTest.clearKnights();
+        underTest.clearCitizens();
 
-        relocateKnights(knights, TRAINING_YARD);
-        underTest.setKnights(knights);
+        relocateCitizens(citizens, TRAINING_YARD);
+        underTest.setCitizens(citizens);
         underTest.process();
 
 
@@ -46,14 +47,14 @@ public class CodalotTest {
 
         givenKnightsInPosition(3, TAVERN);
 
-        underTest.setKnights(knights);
+        underTest.setCitizens(citizens);
         for (int i = 0; i < 3; i++) {
             underTest.process();
         }
-        underTest.clearKnights();
+        underTest.clearCitizens();
 
-        relocateKnights(knights, TRAINING_YARD);
-        underTest.setKnights(knights);
+        relocateCitizens(citizens, TRAINING_YARD);
+        underTest.setCitizens(citizens);
 
         for (int i = 0; i < 3; i++) {
             underTest.process();
@@ -67,14 +68,14 @@ public class CodalotTest {
 
         givenKnightsInPosition(5, TAVERN);
 
-        underTest.setKnights(knights);
+        underTest.setCitizens(citizens);
         for (int i = 0; i < 3; i++) {
             underTest.process();
         }
-        underTest.clearKnights();
+        underTest.clearCitizens();
 
-        relocateKnights(knights, TRAINING_YARD);
-        underTest.setKnights(knights);
+        relocateCitizens(citizens, TRAINING_YARD);
+        underTest.setCitizens(citizens);
 
         for (int i = 0; i < 3; i++) {
             underTest.process();
@@ -88,14 +89,14 @@ public class CodalotTest {
 
         givenKnightsInPosition(6, TAVERN);
 
-        underTest.setKnights(knights);
+        underTest.setCitizens(citizens);
         for (int i = 0; i < 3; i++) {
             underTest.process();
         }
-        underTest.clearKnights();
+        underTest.clearCitizens();
 
-        relocateKnights(knights, TRAINING_YARD);
-        underTest.setKnights(knights);
+        relocateCitizens(citizens, TRAINING_YARD);
+        underTest.setCitizens(citizens);
 
         for (int i = 0; i < 3; i++) {
             underTest.process();
@@ -108,7 +109,7 @@ public class CodalotTest {
     public void thatXpIsNotAwardedWithoutStamina() {
         givenKnightsInPosition(1, TRAINING_YARD);
 
-        underTest.setKnights(knights);
+        underTest.setCitizens(citizens);
 
         underTest.process();
 
@@ -119,13 +120,13 @@ public class CodalotTest {
     public void thatXpIsAwardedWithStamina() {
         givenKnightsInPosition(1, TAVERN);
 
-        underTest.setKnights(knights);
+        underTest.setCitizens(citizens);
 
         underTest.process();
-        underTest.clearKnights();
+        underTest.clearCitizens();
 
-        relocateKnights(knights, TRAINING_YARD);
-        underTest.setKnights(knights);
+        relocateCitizens(citizens, TRAINING_YARD);
+        underTest.setCitizens(citizens);
         underTest.process();
 
         assertThat(underTest.calculateEarnedXp(), is(1));
@@ -135,7 +136,7 @@ public class CodalotTest {
     public void thatXpAndStaminaIsAwardedForSavingDamsel() {
         givenKnightsInPosition(1, DAMSEL_IN_DISTRESS_SITE);
 
-        underTest.setKnights(knights);
+        underTest.setCitizens(citizens);
 
         underTest.process();
 
@@ -147,7 +148,7 @@ public class CodalotTest {
     public void thatXpIsNotAwardedForNegativeStaminaWithSameDay() {
         givenKnightsInPosition(1, TRAINING_YARD);
 
-        underTest.setKnights(knights);
+        underTest.setCitizens(citizens);
 
         //Day 1 - Hour 1
         underTest.process(underTest.getYeOldeGameDateTime());
@@ -156,7 +157,7 @@ public class CodalotTest {
         assertThat(underTest.calculateEarnedStamina(), is(-1));
 
         //Day 1 - Hour 2
-        relocateKnights(knights, TAVERN);
+        relocateCitizens(citizens, TAVERN);
         DateTime nextHour = underTest.getYeOldeGameDateTime().plusHours(1);
         underTest.process(nextHour);
 
@@ -164,7 +165,7 @@ public class CodalotTest {
         assertThat(underTest.calculateEarnedStamina(), is(0));
 
         //Day 1 - Hour 3
-        relocateKnights(knights, TAVERN);
+        relocateCitizens(citizens, TAVERN);
         nextHour = underTest.getYeOldeGameDateTime().plusHours(1);
         underTest.process(nextHour);
 
@@ -172,7 +173,7 @@ public class CodalotTest {
         assertThat(underTest.calculateEarnedStamina(), is(1));
 
         //Day 1 - Hour 4
-        relocateKnights(knights, TAVERN);
+        relocateCitizens(citizens, TAVERN);
         nextHour = underTest.getYeOldeGameDateTime().plusHours(1);
         underTest.process(nextHour);
 
@@ -185,7 +186,7 @@ public class CodalotTest {
     public void thatXpIsAwardedForNegativeStaminaNextDay() {
         givenKnightsInPosition(1, TRAINING_YARD);
 
-        underTest.setKnights(knights);
+        underTest.setCitizens(citizens);
 
         //Day 1 - Hour 1
         underTest.process(underTest.getYeOldeGameDateTime());
@@ -194,7 +195,7 @@ public class CodalotTest {
         assertThat(underTest.calculateEarnedStamina(), is(-1));
 
         //Day 1 - Hour 2
-        relocateKnights(knights, TAVERN);
+        relocateCitizens(citizens, TAVERN);
         DateTime nextHour = underTest.getYeOldeGameDateTime().plusHours(1);
         underTest.process(nextHour);
 
@@ -202,7 +203,7 @@ public class CodalotTest {
         assertThat(underTest.calculateEarnedStamina(), is(0));
 
         //Day 2 - Hour 1
-        relocateKnights(knights, TAVERN);
+        relocateCitizens(citizens, TAVERN);
         nextHour = underTest.getYeOldeGameDateTime().plusDays(1);
         underTest.process(nextHour);
 
@@ -210,27 +211,72 @@ public class CodalotTest {
         assertThat(underTest.calculateEarnedStamina(), is(1));
 
         //Day 2 - Hour 2
-        relocateKnights(knights, TRAINING_YARD);
+        relocateCitizens(citizens, TRAINING_YARD);
         nextHour = underTest.getYeOldeGameDateTime().plusHours(1);
         underTest.process(nextHour);
 
         assertThat(underTest.calculateEarnedXp(), is(1));
         assertThat(underTest.calculateEarnedStamina(), is(0));
-
-
-
     }
 
-    private void givenKnightsInPosition(int knightCount, Position position){
-        knights = new ArrayList<>(knightCount);
-        for (int i=0; i<knightCount; i++){
-            knights.add(i, new Knight.KnightBuilder().withPosition(position).build());
+    @Test
+    public void thatXpIsAwaredToKing() {
+        givenKingInPosition(TAVERN);
+
+        underTest.setCitizens(citizens);
+
+        underTest.process();
+        underTest.clearCitizens();
+
+        relocateCitizens(citizens, TRAINING_YARD);
+        underTest.setCitizens(citizens);
+        underTest.process();
+
+        assertThat(underTest.calculateRoyalEarnedXp(), is(1));
+    }
+
+    @Test
+    public void thatXpIsCalculatedSepareatlyForRoyals() {
+        givenKnightsInPosition(1, TAVERN);
+        citizens.add(givenValidKingInPosition(TAVERN));
+
+        underTest.setCitizens(citizens);
+
+        underTest.process();
+        underTest.clearCitizens();
+
+        relocateCitizens(citizens, TRAINING_YARD);
+        underTest.setCitizens(citizens);
+        underTest.process();
+
+        assertThat(underTest.calculateEarnedXp(), is(1));
+        assertThat(underTest.calculateRoyalEarnedXp(), is(1));
+    }
+
+    private void givenKnightsInPosition(int knightCount, Position position) {
+        citizens = new ArrayList<>(knightCount);
+        for (int i = 0; i < knightCount; i++) {
+            citizens.add(i, givenValidKnightInPosition(position));
         }
     }
 
-    private void relocateKnights(List<Knight> knights, Position position){
-        for (Knight knight : knights){
-            knight.setPosition(position);
+    private Knight givenValidKnightInPosition(Position position) {
+        return new Knight.KnightBuilder().withPosition(position).build();
+    }
+
+    private void givenKingInPosition(Position position) {
+        citizens = new ArrayList<>();
+        citizens.add(givenValidKingInPosition(position));
+    }
+
+    private King givenValidKingInPosition(Position position) {
+        return new King.KingBuilder().withPosition(position).build();
+
+    }
+
+    private void relocateCitizens(List<Citizen> citizens, Position position) {
+        for (Citizen citizen : citizens) {
+            citizen.setPosition(position);
         }
     }
 }

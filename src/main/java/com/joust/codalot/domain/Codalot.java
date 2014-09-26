@@ -6,34 +6,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Codalot {
-    private List<Knight> knights;
+    private List<Citizen> citizens;
     private DateTime yeOldeGameDateTime;
 
     public Codalot(DateTime yeOldeGameDateTime) {
-        knights = new ArrayList<>();
+        citizens = new ArrayList<>();
         setYeOldeGameDateTime(yeOldeGameDateTime);
     }
 
-    protected void setKnights(List<Knight> knights) {
-        this.knights.addAll(knights);
+    protected void setCitizens(List<Citizen> citizens) {
+        this.citizens.addAll(citizens);
     }
 
-    protected void addKnight(Knight knight) {
-        this.knights.add(knight);
+    protected void addCitizen(Citizen citizen) {
+        this.citizens.add(citizen);
     }
 
-    public void clearKnights() {
-        knights.clear();
+    public void clearCitizens() {
+        citizens.clear();
     }
 
-    public void addKnightToTrainingYard(Knight knight) {
-        knights.add(knight);
-        knight.setPosition(Position.TRAINING_YARD);
+    public void addCitizenToTrainingYard(Citizen citizen) {
+        citizens.add(citizen);
+        citizen.setPosition(Position.TRAINING_YARD);
     }
 
-    public void addKnightToTavern(Knight knight) {
-        knights.add(knight);
-        knight.setPosition(Position.TAVERN);
+    public void addCitizenToTavern(Citizen citizen) {
+        citizens.add(citizen);
+        citizen.setPosition(Position.TAVERN);
     }
 
     public DateTime getYeOldeGameDateTime() {
@@ -44,9 +44,9 @@ public class Codalot {
         this.yeOldeGameDateTime = yeOldeGameDateTime;
     }
 
-    public boolean isNewDayInTheKingdom(DateTime dateTime){
+    public boolean isNewDayInTheKingdom(DateTime dateTime) {
         boolean retValue = true;
-        if (dateTime.withTimeAtStartOfDay().isEqual(yeOldeGameDateTime.withTimeAtStartOfDay())){
+        if (dateTime.withTimeAtStartOfDay().isEqual(yeOldeGameDateTime.withTimeAtStartOfDay())) {
             retValue = false;
         }
         yeOldeGameDateTime = dateTime;
@@ -54,63 +54,75 @@ public class Codalot {
     }
 
     public void process(DateTime dateHour) {
-        for (Knight knight : knights) {
-            if (isNewDayInTheKingdom(dateHour)){
-                knight.wakeUp();
+        for (Citizen citizen : citizens) {
+            if (isNewDayInTheKingdom(dateHour)) {
+                citizen.wakeUp();
             }
 
-            if (knight.isInPostion(Position.DAMSEL_IN_DISTRESS_SITE)){
-                knight.incrementStamina(1);
-                knight.incrementXp(1);
+            if (citizen.isInPostion(Position.DAMSEL_IN_DISTRESS_SITE)) {
+                citizen.incrementStamina(1);
+                citizen.incrementXp(1);
             } else {
-                knight.incrementStamina(knight.isInPostion(Position.TAVERN) ? 1 : -1);
-                knight.incrementXp((knight.isInPostion(Position.TRAINING_YARD)) ? 1 : 0);
+                citizen.incrementStamina(citizen.isInPostion(Position.TAVERN) ? 1 : -1);
+                citizen.incrementXp((citizen.isInPostion(Position.TRAINING_YARD)) ? 1 : 0);
             }
         }
     }
 
     public void grantBonusXp() {
-        int bonusKnights = 0;
-        for (Knight knight : knights) {
-            if (knight.getXp() >= 3) {
-                bonusKnights++;
+        int bonusCitizen = 0;
+        for (Citizen citizen : citizens) {
+            if (citizen.getXp() >= 3) {
+                bonusCitizen++;
             }
         }
-        if (bonusKnights == 3) {
-            for (Knight knight : knights) {
-                if (knight.getXp() >= 3) {
-                    knight.setXp(knight.getXp() + 5);
+        if (bonusCitizen == 3) {
+            for (Citizen citizen : citizens) {
+                if (citizen.getXp() >= 3) {
+                    citizen.setXp(citizen.getXp() + 5);
                 }
             }
         }
-        if (bonusKnights == 5) {
-            for (Knight knight : knights) {
-                if (knight.getXp() >= 3) {
-                    knight.setXp(knight.getXp() + 10);
+        if (bonusCitizen == 5) {
+            for (Citizen citizen : citizens) {
+                if (citizen.getXp() >= 3) {
+                    citizen.setXp(citizen.getXp() + 10);
                 }
             }
         }
-        if (bonusKnights == 6) {
-            for (Knight knight : knights) {
-                if (knight.getXp() >= 3) {
-                    knight.setXp(knight.getXp() + 20);
+        if (bonusCitizen == 6) {
+            for (Citizen citizen : citizens) {
+                if (citizen.getXp() >= 3) {
+                    citizen.setXp(citizen.getXp() + 20);
                 }
             }
         }
     }
 
+    public int calculateRoyalEarnedXp() {
+        int total = 0;
+        for (Citizen citizen : citizens) {
+            if (citizen.isRoyalty()) {
+                total += citizen.getXp();
+            }
+        }
+        return total;
+    }
+
     public int calculateEarnedXp() {
         int total = 0;
-        for (Knight knight : knights) {
-            total += knight.getXp();
+        for (Citizen citizen : citizens) {
+            if (!citizen.isRoyalty()) {
+                total += citizen.getXp();
+            }
         }
         return total;
     }
 
     public int calculateEarnedStamina() {
         int total = 0;
-        for (Knight knight : knights) {
-            total += knight.getStamina();
+        for (Citizen citizen : citizens) {
+            total += citizen.getStamina();
         }
         return total;
     }

@@ -1,6 +1,8 @@
 package com.joust.codalot.service;
 
+import com.joust.codalot.domain.Citizen;
 import com.joust.codalot.domain.Codalot;
+import com.joust.codalot.domain.King;
 import com.joust.codalot.domain.Knight;
 import com.joust.codalot.domain.game.CodalotGameParameters;
 import com.joust.codalot.domain.game.CodalotGameResult;
@@ -35,22 +37,27 @@ public class CodalotGameServiceImpl implements CodalotGameService {
 
         Codalot codalot = new Codalot(gameStart);
 
-        ArrayList<Knight> knights = new ArrayList<>();
+        ArrayList<Citizen> citizens = new ArrayList<>();
+
+        //Add the knights
         for (int i = 0; i < parameters.getKnightCount(); ++i) {
-            knights.add(new Knight());
+            citizens.add(new Knight());
         }
+
+        //Add the king
+        citizens.add(new King());
 
         Random random = new Random(1);
 
         for (DateTime dateHour : gameDuration) {
-            codalot.clearKnights();
-            for (Knight knight : knights) {
+            codalot.clearCitizens();
+            for (Citizen citizen : citizens) {
 
                 int randomVal = random.nextInt(2);
                 if (randomVal == 0) {
-                    codalot.addKnightToTrainingYard(knight);
+                    codalot.addCitizenToTrainingYard(citizen);
                 } else if (randomVal == 1) {
-                    codalot.addKnightToTavern(knight);
+                    codalot.addCitizenToTavern(citizen);
                 }
             }
             codalot.process(dateHour);
@@ -59,9 +66,10 @@ public class CodalotGameServiceImpl implements CodalotGameService {
 
         codalot.grantBonusXp();
 
-        gameResult.setMessage(String.format("Total XP earned by all %d knights: %d played over %d days",
-                knights.size(),
+        gameResult.setMessage(String.format("Total XP earned by all %d noble citizens of codalot: %d and XP earned by royalty: %d - played over %d days",
+                citizens.size(),
                 codalot.calculateEarnedXp(),
+                codalot.calculateRoyalEarnedXp(),
                 gameDuration.getGameInterval()));
         gameResult.setFinished(true);
 

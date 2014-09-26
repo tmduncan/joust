@@ -6,9 +6,9 @@ import java.util.List;
 
 public class TestCodalotBuilder {
 
-    public static Codalot createBasicCodalotWithKnights(List<Knight> knights){
+    public static Codalot createBasicCodalotWithKnights(List<Citizen> citizens){
         Codalot codalot = new Codalot(DateTime.now());
-        codalot.setKnights(knights);
+        codalot.setCitizens(citizens);
         return codalot;
     }
 
